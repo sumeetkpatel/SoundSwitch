@@ -31,16 +31,35 @@ namespace SoundSwitch.Framework.Configuration.Device
         public ICollection<DeviceFullInfo> IntersectWith(IEnumerable<DeviceFullInfo> devices)
         {
             var devicesResult = new Dictionary<string, DeviceFullInfo>();
-            foreach (var mmDevice in devices)
+            foreach (var device in devices)
             {
-                if (devicesResult.ContainsKey(mmDevice.Id))
+                //No duplicates
+                if (devicesResult.ContainsKey(device.Id))
                     continue;
 
-                if (!_deviceById.ContainsKey(mmDevice.Id) && !_deviceByName.ContainsKey(mmDevice.Name))
+                //Both dictionaries dont have it
+                if (!_deviceById.ContainsKey(device.Id) && !_deviceByName.ContainsKey(device.Name))
                     continue;
 
-                devicesResult.Add(mmDevice.Id, mmDevice);
+                //Id dictionary has it
+                if (_deviceById.ContainsKey(device.Id))
+                {
+                    //Just add the custom properties to the system device
+                    DeviceInfo deviceInfo = _deviceById[device.Id];
+                    device.CustomName = deviceInfo.CustomName;
+                    device.CustomIconPath = deviceInfo.CustomIconPath;
+                }
 
+                //Name dictionary has it
+                if (_deviceByName.ContainsKey(device.Name))
+                {
+                    //Just add the custom properties to the system device
+                    DeviceInfo deviceInfo = _deviceByName[device.Name];
+                    device.CustomName = deviceInfo.CustomName;
+                    device.CustomIconPath = deviceInfo.CustomIconPath;
+                }
+
+                devicesResult.Add(device.Id, device);
             }
 
             return devicesResult.Values;
@@ -111,6 +130,17 @@ namespace SoundSwitch.Framework.Configuration.Device
         public bool Contains(DeviceInfo item)
         {
             return item != null && (_deviceById.ContainsKey(item.Id) || _deviceByName.ContainsKey(item.Name));
+        }
+
+        public bool UpdateCustomProperties(DeviceInfo item)
+        {
+            if (this.Contains(item)){
+                DeviceInfo existingItem = _deviceById[item.Id];
+                existingItem.CustomName = item.CustomName;
+                existingItem.CustomIconPath = item.CustomIconPath;
+                return true;
+            }
+            return false;
         }
 
         public void CopyTo(DeviceInfo[] array, int arrayIndex)

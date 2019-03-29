@@ -257,6 +257,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
@@ -365,6 +366,27 @@
       <DependentUpon>UpdateDownloadStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="Model\IAudioDeviceLister.cs" />
+    <Compile Include="UI\Forms\DeviceCustomizer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\DeviceCustomizer.Designer.cs">
+      <DependentUpon>DeviceCustomizer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\DeviceItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\DeviceItem.Designer.cs">
+      <DependentUpon>DeviceItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\DeviceSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\DeviceSelector.Designer.cs">
+      <DependentUpon>DeviceSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\TextBoxReadOnly.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Util\AssemblyUtils.cs" />
     <Compile Include="Util\AudioDeviceIconExtractor.cs" />
     <Compile Include="Model\CachedAudioDeviceLister.cs" />
@@ -492,6 +514,15 @@
     <EmbeddedResource Include="UI\Forms\About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\DeviceCustomizer.resx">
+      <DependentUpon>DeviceCustomizer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\DeviceItem.resx">
+      <DependentUpon>DeviceItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\DeviceSelector.resx">
+      <DependentUpon>DeviceSelector.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
@@ -518,12 +549,12 @@
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Visual.C++.14.0.x64">
       <Visible>False</Visible>
-      <ProductName>Bibliotecas en tiempo de ejecución de Visual C++ "14" %28x64%29</ProductName>
+      <ProductName>Visual C++ "14" Runtime Libraries %28x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Visual.C++.14.0.x86">
       <Visible>False</Visible>
-      <ProductName>Bibliotecas en tiempo de ejecución de Visual C++ "14" %28x86%29</ProductName>
+      <ProductName>Visual C++ "14" Runtime Libraries %28x86%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
@@ -562,12 +593,12 @@
   <ItemGroup>
     <PublishFile Include="SMDiagnostics">
       <Visible>False</Visible>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
   </ItemGroup>

@@ -55,6 +55,9 @@ namespace SoundSwitch.UI.Forms
             var closeToolTip = new ToolTip();
             closeToolTip.SetToolTip(closeButton, SettingsStrings.closeTooltip);
 
+            var customizeToolTip = new ToolTip();
+            customizeToolTip.SetToolTip(customizeButton, SettingsStrings.customizeTooltip);
+
             hotkeysTextBox.Text = AppConfigs.Configuration.PlaybackHotKeys.Display();
             hotkeysTextBox.Tag =
                 new Tuple<DataFlow, HotKeys>(DataFlow.Render, AppConfigs.Configuration.PlaybackHotKeys);
@@ -435,6 +438,19 @@ namespace SoundSwitch.UI.Forms
         private void PopulateAudioList(ListView listView, IEnumerable<DeviceInfo> selectedDevices,
             IEnumerable<DeviceFullInfo> audioDevices)
         {
+            //Update playback devices with any custom fields
+            foreach (var selectedDevice in selectedDevices)
+            {
+                foreach (var audioDevice in audioDevices)
+                {
+                    if (selectedDevice.Id == audioDevice.Id || String.Equals(selectedDevice.Name, audioDevice.Name))
+                    {
+                        audioDevice.CustomName = selectedDevice.CustomName;
+                        audioDevice.CustomIconPath = selectedDevice.CustomIconPath;
+                    }
+                }
+            }
+
             try
             {
                 PopulateDeviceTypeGroups(listView);
@@ -458,6 +474,7 @@ namespace SoundSwitch.UI.Forms
             finally
             {
                 listView.ItemCheck += ListViewItemChecked;
+                listView.ItemSelectionChanged += ListView_ItemSelectionChanged;
             }
         }
 
@@ -504,6 +521,14 @@ namespace SoundSwitch.UI.Forms
                     device.LargeIcon);
             }
         }
+        
+        private void ListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            var item = e.Item;
+            var isSelected = e.IsSelected;
+
+            customizeButton.Enabled = isSelected;
+        }
 
         private void ListViewItemChecked(object sender, ItemCheckEventArgs e)
         {
@@ -541,6 +566,10 @@ namespace SoundSwitch.UI.Forms
             {
                 case DeviceState.Active:
                     return listView.Groups[DeviceState.Active.ToString()];
+                case DeviceState.Disabled:
+                    return listView.Groups[DeviceState.Disabled.ToString()];
+                case DeviceState.Unplugged:
+                    return listView.Groups[DeviceState.Unplugged.ToString()];
                 default:
                     return listView.Groups[DeviceState.NotPresent.ToString()];
             }
@@ -548,8 +577,10 @@ namespace SoundSwitch.UI.Forms
 
         private void PopulateDeviceTypeGroups(ListView listView)
         {
-            listView.Groups.Add(new ListViewGroup(DeviceState.Active.ToString(), SettingsStrings.connected));
-            listView.Groups.Add(new ListViewGroup(DeviceState.NotPresent.ToString(), SettingsStrings.disconnected));
+            listView.Groups.Add(new ListViewGroup(DeviceState.Active.ToString(), SettingsStrings.active));
+            listView.Groups.Add(new ListViewGroup(DeviceState.Disabled.ToString(), SettingsStrings.disabled));
+            listView.Groups.Add(new ListViewGroup(DeviceState.Unplugged.ToString(), SettingsStrings.unplugged));
+            listView.Groups.Add(new ListViewGroup(DeviceState.NotPresent.ToString(), SettingsStrings.notpresent));
         }
 
         #endregion
@@ -591,6 +622,23 @@ namespace SoundSwitch.UI.Forms
         {
             AppModel.Instance.CustomNotificationSound = null;
             deleteSoundButton.Visible = false;
+        }
+
+        private void customizeButton_Click(object sender, EventArgs e)
+        {
+            var listItem = playbackListView.SelectedItems[0];
+            DeviceFullInfo item = (DeviceFullInfo)listItem.Tag;
+
+            DeviceCustomizer customizer = new DeviceCustomizer(item.CustomName, item.CustomIconPath);
+            DialogResult result = customizer.ShowDialog(this);
+
+            if (result == DialogResult.OK)
+            {
+                item.CustomName = customizer.CustomName;
+                item.CustomIconPath = customizer.CustomPath;
+
+                AppModel.Instance.UpdateDeviceNameAndPath(item);
+            }
         }
     }
 }

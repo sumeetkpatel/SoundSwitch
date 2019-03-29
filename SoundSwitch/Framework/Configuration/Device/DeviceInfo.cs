@@ -10,12 +10,18 @@ namespace SoundSwitch.Framework.Configuration.Device
         public string Id { get; }
         public DataFlow Type { get; }
 
+        public string CustomName { get; set; }
+        public string CustomIconPath { get; set; }
+
         [JsonConstructor]
-        public DeviceInfo(string name, string id, DataFlow type)
+        public DeviceInfo(string name, string id, DataFlow type, string customName = null, string customIconPath = null)
         {
             Name = name;
             Id = id;
             Type = type;
+
+            CustomName = customName;
+            CustomIconPath = customIconPath;
         }
 
         public DeviceInfo(MMDevice device)
@@ -47,6 +53,8 @@ namespace SoundSwitch.Framework.Configuration.Device
                 var hashCode = (int) Type + 1;
                 hashCode = (hashCode * 397) ^ (Id != null ? Id.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (CustomName != null ? CustomName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (CustomIconPath != null ? CustomIconPath.GetHashCode() : 0);
                 return hashCode;
             }
         }
@@ -70,6 +78,10 @@ namespace SoundSwitch.Framework.Configuration.Device
             if (typeComparison != 0) return typeComparison;
             var idComparison = string.Compare(Id, other.Id, StringComparison.Ordinal);
             if (idComparison != 0) return idComparison;
+            var customNameComparison = string.Compare(CustomName, other.CustomName, StringComparison.Ordinal);
+            if (customNameComparison != 0) return customNameComparison;
+            var customIconPathComparison = string.Compare(CustomIconPath, other.CustomIconPath, StringComparison.Ordinal);
+            if (customIconPathComparison != 0) return customIconPathComparison;
             return string.Compare(Name, other.Name, StringComparison.Ordinal);
         }
      

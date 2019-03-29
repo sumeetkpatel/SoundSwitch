@@ -61,6 +61,15 @@ namespace SoundSwitch.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active.
+        /// </summary>
+        internal static string active {
+            get {
+                return ResourceManager.GetString("active", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Play: {0}.
         /// </summary>
         internal static string activePlayback {
@@ -169,6 +178,15 @@ namespace SoundSwitch.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Customize device name and icon..
+        /// </summary>
+        internal static string customizeTooltip {
+            get {
+                return ResourceManager.GetString("customizeTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cycle through.
         /// </summary>
         internal static string cycleThrough {
@@ -210,6 +228,15 @@ namespace SoundSwitch.Localization {
         internal static string disableCustomSoundTooltip {
             get {
                 return ResourceManager.GetString("disableCustomSoundTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disabled.
+        /// </summary>
+        internal static string disabled {
+            get {
+                return ResourceManager.GetString("disabled", resourceCulture);
             }
         }
         
@@ -363,6 +390,15 @@ namespace SoundSwitch.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not Present.
+        /// </summary>
+        internal static string notpresent {
+            get {
+                return ResourceManager.GetString("notpresent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Playback.
         /// </summary>
         internal static string playback {
@@ -458,6 +494,15 @@ namespace SoundSwitch.Localization {
         internal static string tooltipOnHoverOptionRecordingDevice {
             get {
                 return ResourceManager.GetString("tooltipOnHoverOptionRecordingDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unplugged.
+        /// </summary>
+        internal static string unplugged {
+            get {
+                return ResourceManager.GetString("unplugged", resourceCulture);
             }
         }
         

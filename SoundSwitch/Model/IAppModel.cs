@@ -155,6 +155,16 @@ namespace SoundSwitch.Model
         bool UnselectDevice(DeviceFullInfo device);
 
         /// <summary>
+        ///     Update a device name and path from the Set.
+        /// </summary>
+        /// <param name="device"></param>
+        /// <returns>
+        ///     true if the element is successfully found and updated; otherwise, false.
+        ///     <paramref name="device" /> is not found in the <see cref="T:System.Collections.Generic.HashSet`1" /> object.
+        /// </returns>
+        bool UpdateDeviceNameAndPath(DeviceFullInfo device);
+
+        /// <summary>
         ///     Sets the hotkey combination
         /// </summary>
         /// <param name="hotkeys"></param>

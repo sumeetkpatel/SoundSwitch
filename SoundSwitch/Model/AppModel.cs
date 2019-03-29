@@ -321,6 +321,27 @@ namespace SoundSwitch.Model
             return true;
         }
 
+        public bool UpdateDeviceNameAndPath(DeviceFullInfo device)
+        {
+            var result = false;
+            try
+            {
+                result = SelectedDevices.UpdateCustomProperties(device);
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
+
+            if (result)
+            {
+                SelectedDeviceChanged?.Invoke(this,
+                    new DeviceListChanged(SelectedDevices, device.Type));
+                AppConfigs.Configuration.Save();
+            }
+
+            return true;
+        }
         #endregion
 
         #region Hot keys

@@ -67,6 +67,8 @@ namespace SoundSwitch.Util
         private readonly ToolStripMenuItem _updateMenuItem;
         private Timer _animationTimer;
 
+        private DeviceSelector deviceSelector;
+
         public TrayIcon()
         {
             UpdateIcon();
@@ -101,7 +103,26 @@ namespace SoundSwitch.Util
                 NotifyIcon.ContextMenuStrip = _selectionMenu;
                 var mi = typeof(NotifyIcon).GetMethod("ShowContextMenu",
                     BindingFlags.Instance | BindingFlags.NonPublic);
-                mi.Invoke(NotifyIcon, null);
+
+                //Pop the device chooser
+                var playbackDevices = AppModel.Instance.AvailablePlaybackDevices;
+
+                //No devices, do it the old way
+                if (playbackDevices.Count == 0)
+                {
+                    mi.Invoke(NotifyIcon, null);
+                }
+                else if (deviceSelector == null || deviceSelector.Visible == false)
+                {
+                    deviceSelector = new DeviceSelector(playbackDevices);
+                    deviceSelector.deviceSelected += (selectorSender, args) =>
+                    {
+                        DeviceItem selectedItem = (DeviceItem)args;
+                        DeviceItemClicked(selectedItem);
+                        deviceSelector.Close();
+                    };
+                    deviceSelector.Show();
+                }
 
                 NotifyIcon.ContextMenuStrip = _settingsMenu;
             };
@@ -337,6 +358,18 @@ namespace SoundSwitch.Util
             }
         }
 
+        private void DeviceItemClicked(DeviceItem sender)
+        {
+            try
+            {
+                var item = (DeviceItem)sender;
+                AppModel.Instance.SetActiveDevice(item.AudioDevice);
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
+        }
         /// <summary>
         /// Notification for when there are no devices configured
         /// </summary>
